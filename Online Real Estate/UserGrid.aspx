@@ -15,6 +15,9 @@
                                     </EditItemTemplate>
                                     <ItemTemplate>
                                         <asp:Label ID="nameLabel" runat="server" Text='<%# Bind("UserName") %>'>
+
+
+
                                             </asp:Label>
                                     </ItemTemplate>
                                 </asp:TemplateField>
