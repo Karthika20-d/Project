@@ -15,12 +15,12 @@ namespace Online_Real_Estate
     {
 
         /// <summary>
-        /// userGrid control.
+        /// UserData control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.GridView userGrid;
+        protected global::System.Web.UI.WebControls.GridView UserData;
     }
 }

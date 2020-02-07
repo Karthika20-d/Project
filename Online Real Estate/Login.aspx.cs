@@ -16,6 +16,8 @@ namespace Online_Real_Estate
             string password = Convert.ToString(txtPassword.Text);
             if (userRepositary.Login(userName, password))
             {
+
+
                 Response.Write("<script>alert('login successful');</script>");
             }
             else

@@ -15,45 +15,38 @@ namespace Online_Real_Estate
         {
             if (!Page.IsPostBack)
             {
-                refreshData();
+                RefreshData();
             }
         }
-        void refreshData()
+        void RefreshData()
         {
-            SqlConnection sqlConnection = UserRepositary.GetDBConnection();
-            SqlCommand sqlCommand = new SqlCommand("SPSelect",sqlConnection) ;
-            SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
-            DataTable dataTable = new DataTable();
-            adapter.Fill(dataTable);
-            userGrid.DataSource = dataTable;
-            userGrid.DataBind();
+
+            UserRepositary userRepositary = new UserRepositary();
+            userRepositary.RefreshData(UserData); 
+        }
+        protected void UserGrid_RowDeleting(object sender, System.Web.UI.WebControls.GridViewDeleteEventArgs e)
+        {
+            UserRepositary userRepositary = new UserRepositary();
+            userRepositary.DeleteUserDetails(UserData, e);
+            RefreshData();
         }
 
-
-      
-
-        protected void userGrid_RowDeleting(object sender, System.Web.UI.WebControls.GridViewDeleteEventArgs e)
+        protected void UserGrid_RowEditing(object sender, System.Web.UI.WebControls.GridViewEditEventArgs e)
         {
-            int userId = Convert.ToInt32(userGrid.DataKeys[e.RowIndex].Values["UserID"]);
-            SqlConnection sqlConnection = UserRepositary.GetDBConnection();
-            sqlConnection.Open();
-            SqlCommand sqlCommand = new SqlCommand("delete from UserDetails where userId=@UserID ", sqlConnection);
-            sqlCommand.Parameters.AddWithValue("UserID", userId);
-            int row = sqlCommand.ExecuteNonQuery();
-            sqlConnection.Close();
-            refreshData();
+            UserData.EditIndex = e.NewEditIndex;
+            RefreshData();
         }
 
-        protected void userGrid_RowEditing(object sender, System.Web.UI.WebControls.GridViewEditEventArgs e)
+        protected void UserGrid_RowCancelingEdit(object sender, System.Web.UI.WebControls.GridViewCancelEditEventArgs e)
         {
-            userGrid.EditIndex = e.NewEditIndex;
-            refreshData();
+            UserData.EditIndex = -1;
+            RefreshData();
         }
 
-        protected void userGrid_RowCancelingEdit(object sender, System.Web.UI.WebControls.GridViewCancelEditEventArgs e)
+        protected void UserGrid_RowUpdating(object sender, System.Web.UI.WebControls.GridViewUpdateEventArgs e)
         {
-            userGrid.EditIndex = -1;
-            refreshData();
+            UserRepositary userRepositary = new UserRepositary();
+            userRepositary.UpdateUserDetails(UserData,e);
         }
     }
 }

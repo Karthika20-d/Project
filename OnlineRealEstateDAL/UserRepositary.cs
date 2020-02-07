@@ -4,6 +4,7 @@ using System.Data;
 using System;
 using OnlineRealEstateEntity;
 using System.Data.SqlClient;
+using System.Web.UI.WebControls;
 
 namespace OnlineRealEstateDAL
 {
@@ -16,9 +17,7 @@ namespace OnlineRealEstateDAL
         ArrayList userData = new ArrayList();
         //internal static                           string propertyType;
         public int SignUp(UserManager userManager)
-        {
-
-            
+        {   
             string insertQuery = "SPInsert";
             using (SqlCommand sqlCommand = new SqlCommand(insertQuery, sqlConnection))
             {
@@ -143,6 +142,68 @@ namespace OnlineRealEstateDAL
                 Admin admin = new Admin("Karthika", "Karthika20", "admin", "994494218", "karthika@gmail.com");
 
             }*/
+        }
+        public void RefreshData(GridView userGrid)
+        {
+            SqlCommand sqlCommand = new SqlCommand("SPSelect", sqlConnection);
+            SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
+            DataTable dataTable = new DataTable();
+            adapter.Fill(dataTable);
+            userGrid.DataSource = dataTable;
+            userGrid.DataBind();
+        }
+        public void DeleteUserDetails(GridView gridView, GridViewDeleteEventArgs gridViewDeleteEventArgs)
+        {
+            int userId = Convert.ToInt32(gridView.DataKeys[gridViewDeleteEventArgs.RowIndex].Values["UserID"]);
+            sqlConnection.Open();
+            SqlCommand sqlCommand = new SqlCommand("SP_DeleteUserDetails", sqlConnection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            SqlParameter param = new SqlParameter();
+            param.ParameterName = "@userId";
+            param.Value = userId;
+            param.SqlDbType = SqlDbType.Int;
+            sqlCommand.Parameters.Add(param);
+            sqlCommand.ExecuteNonQuery();
+            sqlConnection.Close();
+        }
+        public void UpdateUserDetails(GridView gridView,GridViewUpdateEventArgs gridViewUpdateEventArgs)
+        {
+            TextBox userName = gridView.Rows[gridViewUpdateEventArgs.RowIndex].FindControl("txtName") as TextBox;
+            TextBox role = gridView.Rows[gridViewUpdateEventArgs.RowIndex].FindControl("txtRoleId") as TextBox;
+            TextBox location = gridView.Rows[gridViewUpdateEventArgs.RowIndex].FindControl("txtLocationId") as TextBox;
+            int userId = Convert.ToInt32(gridView.DataKeys[gridViewUpdateEventArgs.RowIndex].Values["UserID"]);
+            SqlCommand sqlCommand = new SqlCommand("SP_UpdateUserDetails", sqlConnection);
+            sqlCommand.CommandType = CommandType.StoredProcedure;
+            SqlParameter param = new SqlParameter();
+            param.ParameterName = "@userId";
+            param.Value = userId;
+            param.SqlDbType = SqlDbType.Int;
+            sqlCommand.Parameters.Add(param);
+
+            param = new SqlParameter();
+            param.ParameterName = "@userName";
+            param.Value = userName.Text;
+            param.SqlDbType = SqlDbType.VarChar;
+            sqlCommand.Parameters.Add(param);
+
+            param = new SqlParameter();
+            param.ParameterName = "@Role";
+            param.Value = role.Text;
+            param.SqlDbType = SqlDbType.VarChar;
+            sqlCommand.Parameters.Add(param);
+
+            param = new SqlParameter();
+            param.ParameterName = "@Location";
+            param.Value = location.Text;
+            param.SqlDbType = SqlDbType.VarChar;
+            sqlCommand.Parameters.Add(param);
+            sqlConnection.Open();
+            sqlCommand.ExecuteNonQuery();
+            sqlConnection.Close();
+        }
+        public void InsertUserDetails()
+        {
+
         }
     }
 }
