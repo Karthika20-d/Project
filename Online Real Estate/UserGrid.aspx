@@ -10,6 +10,7 @@
                             <Columns>
                                 <asp:TemplateField HeaderText="Name">
                                     <EditItemTemplate>
+
                                         <asp:TextBox ID="nameId" runat="server" Text='<%# Bind("UserName") %>'>
                                             </asp:TextBox>
                                     </EditItemTemplate>
