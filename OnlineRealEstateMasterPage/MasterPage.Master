@@ -1,0 +1,40 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="MasterPage.master.cs" Inherits="OnlineRealEstateMasterPage.MasterPage" %>
+
+<!DOCTYPE html>
+
+<html>
+<head runat="server">
+    <title></title>
+    <link href="\D:\Intern\Project\Online Real Estate\Master.css" rel="stylesheet" type="text/css" />
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+    <style type="text/css">
+        .auto-style1 {
+            width: 662px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <form id="form1" runat="server">
+        <div>
+            <table>
+                <tr>
+                    <td class="auto-style1">
+                        <h1>Real Estae</h1>
+                        <a href="SignUp.aspx">SignUp </a><a href="Login.aspx">Login </a></td>
+                </tr>
+                <tr>
+                    <td>
+                        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+                        </asp:ContentPlaceHolder>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </form>
+
+
+</body>
+</html>
