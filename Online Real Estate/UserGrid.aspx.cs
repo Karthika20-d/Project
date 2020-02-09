@@ -1,11 +1,7 @@
 ﻿using System;
-using OnlineRealEstateDAL;
-
-using System.Data.SqlClient;
-using System.Data;
-using System.Collections.Generic;
+using OnlineRealEstateBL;
 using System.Web.UI;
-
+using System.Web.UI.WebControls;
 
 namespace Online_Real_Estate
 {
@@ -15,38 +11,42 @@ namespace Online_Real_Estate
         {
             if (!Page.IsPostBack)
             {
-                RefreshData();
+                if((string)Session["UserName"]=="Karthika" && (string)Session["Password"]=="Karthika@20admin")
+                {
+                    UserBL.RefreshData(UserData);
+                }
+               
             }
         }
-        void RefreshData()
+        protected void UserGrid_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
-
-            UserRepositary userRepositary = new UserRepositary();
-            userRepositary.RefreshData(UserData); 
-        }
-        protected void UserGrid_RowDeleting(object sender, System.Web.UI.WebControls.GridViewDeleteEventArgs e)
-        {
-            UserRepositary userRepositary = new UserRepositary();
-            userRepositary.DeleteUserDetails(UserData, e);
-            RefreshData();
+            UserBL.IsDeleteUserDetails(UserData, e);
+            UserBL.RefreshData(UserData);
         }
 
-        protected void UserGrid_RowEditing(object sender, System.Web.UI.WebControls.GridViewEditEventArgs e)
+        protected void UserGrid_RowEditing(object sender, GridViewEditEventArgs e)
         {
             UserData.EditIndex = e.NewEditIndex;
-            RefreshData();
+            UserBL.RefreshData(UserData);
         }
 
-        protected void UserGrid_RowCancelingEdit(object sender, System.Web.UI.WebControls.GridViewCancelEditEventArgs e)
+        protected void UserGrid_RowCancelingEdit(object sender, GridViewCancelEditEventArgs e)
         {
             UserData.EditIndex = -1;
-            RefreshData();
+            UserBL.RefreshData(UserData);
         }
 
-        protected void UserGrid_RowUpdating(object sender, System.Web.UI.WebControls.GridViewUpdateEventArgs e)
+        protected void UserGrid_RowUpdating(object sender, GridViewUpdateEventArgs e)
         {
-            UserRepositary userRepositary = new UserRepositary();
-            userRepositary.UpdateUserDetails(UserData,e);
+            UserBL.IsUpdateUserDetails(UserData, e);
+            UserBL.RefreshData(UserData);
+
+        }
+
+        protected void btnInsert_Click(object sender, EventArgs e)
+        {
+            UserBL.IsInsertUserDetails(UserData);
+            UserBL.RefreshData(UserData);
         }
     }
 }

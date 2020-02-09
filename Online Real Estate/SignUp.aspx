@@ -2,14 +2,12 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
-  
           Registration
             <table>
                 <tr>
                     <td>Name</td>
                     <td>
                         <asp:TextBox ID="txtName" runat="server" required="" />
-
                     </td>
                     <td>
                         <asp:RequiredFieldValidator ID="rfvName" runat="server"
@@ -76,7 +74,7 @@
                             ControlToValidate="txtConfirmPassword" ControlToCompare="txtPassword"></asp:CompareValidator>
                     </td>
                 </tr>
-                <tr>
+                <tr> 
                     <td>
                         <asp:Button ID="btnSubmit" Text="Submit" runat="server" OnClick="submit_Click" />
 

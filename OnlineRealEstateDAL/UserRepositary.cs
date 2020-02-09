@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Data;
 using System;
+using System.Configuration;
 using OnlineRealEstateEntity;
 using System.Data.SqlClient;
 using System.Web.UI.WebControls;
@@ -11,14 +12,12 @@ namespace OnlineRealEstateDAL
 
     public class UserRepositary
     {
-        internal Dictionary<int, Admin> user = new Dictionary<int, Admin>();
-        DataSet products = new DataSet();
-        SqlConnection sqlConnection = UserRepositary.GetDBConnection();
-        ArrayList userData = new ArrayList();
-        //internal static                           string propertyType;
-        public int SignUp(UserManager userManager)
-        {   
+        internal static Dictionary<int, Admin> user = new Dictionary<int, Admin>();
+        static SqlConnection sqlConnection = UserRepositary.GetDBConnection();
+        public static int SignUp(UserManager userManager)
+        {
             string insertQuery = "SPInsert";
+            
             using (SqlCommand sqlCommand = new SqlCommand(insertQuery, sqlConnection))
             {
                 sqlCommand.CommandType = CommandType.StoredProcedure;
@@ -61,6 +60,8 @@ namespace OnlineRealEstateDAL
                 int userID = Convert.ToInt32(sqlCommand.ExecuteScalar());
                 string selectQuery = "SPSelect";
                 SqlDataAdapter adapter = new SqlDataAdapter(selectQuery, sqlConnection);
+                DataSet products = new DataSet();
+                ArrayList userData = new ArrayList();
                 int rows = sqlCommand.ExecuteNonQuery();
                 if (rows >= 1)
                 {
@@ -105,10 +106,14 @@ namespace OnlineRealEstateDAL
             string connectionString = @"Data Source=" + dataSource + ";Initial Catalog=" + dataBase + ";Integrated Security=true;";
             SqlConnection sqlConnection = new SqlConnection(connectionString);
             return sqlConnection;
+
+            //string connectionstring = ConfigurationManager.ConnectionStrings["RealEstate"].ConnectionString;
+            //SqlConnection sqlConnection = new SqlConnection(connectionstring);
+            //return sqlConnection;
         }
-        public bool Login(string username, string password)
+        public static bool Login(string username, string password)
         {
-           // bool flag = false;
+            // bool flag = false;
             string selectQuery = "SPUserLogin";
             using (SqlCommand sqlCommand = new SqlCommand(selectQuery, sqlConnection))
             {
@@ -125,16 +130,9 @@ namespace OnlineRealEstateDAL
                 param.SqlDbType = SqlDbType.VarChar;
                 sqlCommand.Parameters.Add(param);
                 sqlConnection.Open();
-                 string role = sqlCommand.ExecuteScalar().ToString();
-                
-                if (role == "Buyer")
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
+                string role = sqlCommand.ExecuteScalar().ToString();
+                sqlConnection.Close();
+                return true;
 
             }
             /*private static void AddAdminDetails()
@@ -143,16 +141,18 @@ namespace OnlineRealEstateDAL
 
             }*/
         }
-        public void RefreshData(GridView userGrid)
+        public static void RefreshData(GridView userGrid)
         {
             SqlCommand sqlCommand = new SqlCommand("SPSelect", sqlConnection);
+            sqlConnection.Open();
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataTable dataTable = new DataTable();
             adapter.Fill(dataTable);
             userGrid.DataSource = dataTable;
             userGrid.DataBind();
+            sqlConnection.Close();
         }
-        public void DeleteUserDetails(GridView gridView, GridViewDeleteEventArgs gridViewDeleteEventArgs)
+        public static void DeleteUserDetails(GridView gridView, GridViewDeleteEventArgs gridViewDeleteEventArgs)
         {
             int userId = Convert.ToInt32(gridView.DataKeys[gridViewDeleteEventArgs.RowIndex].Values["UserID"]);
             sqlConnection.Open();
@@ -166,7 +166,7 @@ namespace OnlineRealEstateDAL
             sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
         }
-        public void UpdateUserDetails(GridView gridView,GridViewUpdateEventArgs gridViewUpdateEventArgs)
+        public static void UpdateUserDetails(GridView gridView, GridViewUpdateEventArgs gridViewUpdateEventArgs)
         {
             TextBox userName = gridView.Rows[gridViewUpdateEventArgs.RowIndex].FindControl("txtName") as TextBox;
             TextBox role = gridView.Rows[gridViewUpdateEventArgs.RowIndex].FindControl("txtRoleId") as TextBox;
@@ -201,9 +201,59 @@ namespace OnlineRealEstateDAL
             sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
         }
-        public void InsertUserDetails()
+       public static void InsertUserDetails(GridView gridView)
         {
+            TextBox userName = gridView.FooterRow.FindControl("txtNameInsert") as TextBox;
+            TextBox role = gridView.FooterRow.FindControl("txtRoleInsert") as TextBox;
+            TextBox location = gridView.FooterRow.FindControl("txtLocationInsert") as TextBox;
+            TextBox mail = gridView.FooterRow.FindControl("txtmailInsert") as TextBox;
+            TextBox password = gridView.FooterRow.FindControl("txtPasswordInsert") as TextBox;
+            TextBox phoneNumber = gridView.FooterRow.FindControl("txtPhoneInsert") as TextBox;
 
+            string insertQuery = "SPInsert";
+
+            using (SqlCommand sqlCommand = new SqlCommand(insertQuery, sqlConnection))
+            {
+                sqlCommand.CommandType = CommandType.StoredProcedure;
+                SqlParameter param = new SqlParameter();
+                param.ParameterName = "@UserName" ;
+                param.Value = userName.Text;
+                param.SqlDbType = SqlDbType.VarChar;
+                sqlCommand.Parameters.Add(param);
+
+                param = new SqlParameter();
+                param.ParameterName = "@Password";
+                param.Value = password.Text;
+                param.SqlDbType = SqlDbType.VarChar;
+                sqlCommand.Parameters.Add(param);
+
+                param = new SqlParameter();
+                param.ParameterName = "@Mail_id";
+                param.Value = mail.Text;
+                param.SqlDbType = SqlDbType.VarChar;
+                sqlCommand.Parameters.Add(param);
+
+                param = new SqlParameter();
+                param.ParameterName = "@Location";
+                param.Value = location.Text;
+                param.SqlDbType = SqlDbType.VarChar;
+                sqlCommand.Parameters.Add(param);
+
+                param = new SqlParameter();
+                param.ParameterName = "@Phone_Number";
+                param.Value = phoneNumber.Text;
+                param.SqlDbType = SqlDbType.VarChar;
+                sqlCommand.Parameters.Add(param);
+
+                param = new SqlParameter();
+                param.ParameterName = "@Role";
+                param.Value = role.Text;
+                param.SqlDbType = SqlDbType.VarChar;
+                sqlCommand.Parameters.Add(param);
+                sqlConnection.Open();
+                int rows = sqlCommand.ExecuteNonQuery();
+
+            }
         }
     }
 }

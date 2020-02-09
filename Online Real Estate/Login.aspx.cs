@@ -1,5 +1,5 @@
 ﻿using System;
-using OnlineRealEstateDAL;
+using OnlineRealEstateBL;
 
 namespace Online_Real_Estate
 {
@@ -11,14 +11,14 @@ namespace Online_Real_Estate
         }
         protected void submit_Click(object sender, EventArgs e)
         {
-            UserRepositary userRepositary = new UserRepositary();
             string userName = Convert.ToString(txtName.Text);
             string password = Convert.ToString(txtPassword.Text);
-            if (userRepositary.Login(userName, password))
+            if(UserBL.IsLogin(userName, password))
             {
-
-
                 Response.Write("<script>alert('login successful');</script>");
+                Session["UserName"] = userName;
+                Session["Password"] = password;
+                Response.Redirect("UserGrid.aspx");
             }
             else
             {

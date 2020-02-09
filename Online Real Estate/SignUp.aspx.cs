@@ -1,5 +1,5 @@
 ﻿using System;
-using OnlineRealEstateDAL;
+using OnlineRealEstateBL;
 using OnlineRealEstateEntity;
 
 namespace Online_Real_Estate
@@ -8,7 +8,7 @@ namespace Online_Real_Estate
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+           
         }
         protected void submit_Click(object sender, EventArgs e)
         {
@@ -22,9 +22,16 @@ namespace Online_Real_Estate
                 role = btnSeller.Text;
             }
             UserManager userManager = new UserManager(txtName.Text, txtPassword.Text, txtMail.Text, txtLocation.Text, txtNumber.Text, role);
-            UserRepositary userRepositary = new UserRepositary();
-            int userId = userRepositary.SignUp(userManager);
-            Response.Write("<script>alert(' successful');</script>");
+            int userId=UserBL.SignUp(userManager);
+            if(userId!=0)
+            {
+                Response.Write("<script>alert('Your ID is '+userId+'submit successful');</script>");
+            }
+            else
+            {
+                Response.Write("<script>alert('submit successful');</script>");
+            }
+           
         }
     }
 }

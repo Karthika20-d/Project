@@ -123,6 +123,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OnlineRealEstateBL\OnlineRealEstateBL.csproj">
+      <Project>{aa0ea84a-1d9e-47ca-a333-655026ca1c6b}</Project>
+      <Name>OnlineRealEstateBL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OnlineRealEstateDAL\OnlineRealEstateDAL.csproj">
       <Project>{015b3b22-fe93-4357-b69a-29a662b4a235}</Project>
       <Name>OnlineRealEstateDAL</Name>

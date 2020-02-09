@@ -1,4 +1,6 @@
 ﻿h1 {
-    border: 10pt, 5pt, 4pt, 4pt;
+    padding:10px;
+    width:1330px;
     background-color:lavender;
+    text-align:center
 }
