@@ -60,13 +60,13 @@ namespace Online_Real_Estate
         protected global::System.Web.UI.WebControls.TextBox txtNumber;
 
         /// <summary>
-        /// rvfNumber control.
+        /// rxNumber control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.RequiredFieldValidator rvfNumber;
+        protected global::System.Web.UI.WebControls.RegularExpressionValidator rxNumber;
 
         /// <summary>
         /// btnBuyer control.

@@ -4,23 +4,23 @@ namespace OnlineRealEstateEntity
 {
     public class Admin
     {
-        internal string name { get; set; }
-        internal string password { get; set; }
-        internal string email { get; set; }
-        internal string location { get; set; }
-        internal string phoneNumber { get; set; }
-        internal string role { get; set; }
-        internal int userID { get; set; }
-        public  Admin(int userID, ArrayList userData)
-        {
-            this.userID = userID;
-            this.name =Convert.ToString( userData[0]);
-            this.password = Convert.ToString(userData[1]);
-            this.email = Convert.ToString(userData[2]);
-            this.location = Convert.ToString(userData[3]);
-            this.phoneNumber = Convert.ToString(userData[4]);
-            this.role = Convert.ToString(userData[5]);
-        }
+        //internal string name { get; set; }
+        //internal string password { get; set; }
+        //internal string email { get; set; }
+        //internal string location { get; set; }
+        //internal string phoneNumber { get; set; }
+        //internal string role { get; set; }
+        //internal int userID { get; set; }
+        //public  Admin(int userID, ArrayList userData)
+        //{
+        //    this.userID = userID;
+        //    this.name =Convert.ToString( userData[0]);
+        //    this.password = Convert.ToString(userData[1]);
+        //    this.email = Convert.ToString(userData[2]);
+        //    this.location = Convert.ToString(userData[3]);
+        //    this.phoneNumber = Convert.ToString(userData[4]);
+        //    this.role = Convert.ToString(userData[5]);
+        //}
     }
     /* {
          private enum AdminOption

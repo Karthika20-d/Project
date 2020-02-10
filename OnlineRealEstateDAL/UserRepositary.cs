@@ -12,145 +12,121 @@ namespace OnlineRealEstateDAL
 
     public class UserRepositary
     {
-        internal static Dictionary<int, Admin> user = new Dictionary<int, Admin>();
         static SqlConnection sqlConnection = UserRepositary.GetDBConnection();
         public static int SignUp(UserManager userManager)
         {
-            string insertQuery = "SPInsert";
-            
-            using (SqlCommand sqlCommand = new SqlCommand(insertQuery, sqlConnection))
+            try
             {
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                SqlParameter param = new SqlParameter();
-                param.ParameterName = "@UserName";
-                param.Value = userManager.name;
-                param.SqlDbType = SqlDbType.VarChar;
-                sqlCommand.Parameters.Add(param);
+                string insertQuery = "SPInsert";
 
-                param = new SqlParameter();
-                param.ParameterName = "@Password";
-                param.Value = userManager.password;
-                param.SqlDbType = SqlDbType.VarChar;
-                sqlCommand.Parameters.Add(param);
-
-                param = new SqlParameter();
-                param.ParameterName = "@Mail_id";
-                param.Value = userManager.email;
-                param.SqlDbType = SqlDbType.VarChar;
-                sqlCommand.Parameters.Add(param);
-
-                param = new SqlParameter();
-                param.ParameterName = "@Location";
-                param.Value = userManager.location;
-                param.SqlDbType = SqlDbType.VarChar;
-                sqlCommand.Parameters.Add(param);
-
-                param = new SqlParameter();
-                param.ParameterName = "@Phone_Number";
-                param.Value = userManager.phoneNumber;
-                param.SqlDbType = SqlDbType.VarChar;
-                sqlCommand.Parameters.Add(param);
-
-                param = new SqlParameter();
-                param.ParameterName = "@Role";
-                param.Value = UserManager.role;
-                param.SqlDbType = SqlDbType.VarChar;
-                sqlCommand.Parameters.Add(param);
-                sqlConnection.Open();
-                int userID = Convert.ToInt32(sqlCommand.ExecuteScalar());
-                string selectQuery = "SPSelect";
-                SqlDataAdapter adapter = new SqlDataAdapter(selectQuery, sqlConnection);
-                DataSet products = new DataSet();
-                ArrayList userData = new ArrayList();
-                int rows = sqlCommand.ExecuteNonQuery();
-                if (rows >= 1)
+                using (SqlCommand sqlCommand = new SqlCommand(insertQuery, sqlConnection))
                 {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    SqlParameter param = new SqlParameter();
+                    param.ParameterName = "@UserName";
+                    param.Value = userManager.name;
+                    param.SqlDbType = SqlDbType.VarChar;
+                    sqlCommand.Parameters.Add(param);
 
+                    param = new SqlParameter();
+                    param.ParameterName = "@Password";
+                    param.Value = userManager.password;
+                    param.SqlDbType = SqlDbType.VarChar;
+                    sqlCommand.Parameters.Add(param);
 
-                    adapter.Fill(products, "UserDetails");
-                    foreach (DataTable data in products.Tables)
+                    param = new SqlParameter();
+                    param.ParameterName = "@Mail_id";
+                    param.Value = userManager.email;
+                    param.SqlDbType = SqlDbType.VarChar;
+                    sqlCommand.Parameters.Add(param);
+
+                    param = new SqlParameter();
+                    param.ParameterName = "@Location";
+                    param.Value = userManager.location;
+                    param.SqlDbType = SqlDbType.VarChar;
+                    sqlCommand.Parameters.Add(param);
+
+                    param = new SqlParameter();
+                    param.ParameterName = "@Phone_Number";
+                    param.Value = userManager.phoneNumber;
+                    param.SqlDbType = SqlDbType.BigInt;
+                    sqlCommand.Parameters.Add(param);
+
+                    param = new SqlParameter();
+                    param.ParameterName = "@Role";
+                    param.Value = UserManager.role;
+                    param.SqlDbType = SqlDbType.VarChar;
+                    sqlCommand.Parameters.Add(param);
+                    sqlConnection.Open();
+                    int userID = Convert.ToInt32(sqlCommand.ExecuteScalar());
+                    int rows = sqlCommand.ExecuteNonQuery();
+                    if (rows >= 1)
                     {
-                        if (data.TableName == "UserDetails")
-                        {
-                            for (int row = 0; row < data.Rows.Count; row++)
-                            {
-                                for (int rowColumn = 0; rowColumn < data.Columns.Count; rowColumn++)
-                                {
-                                    userData.Add(data.Rows[row][rowColumn]);
-                                }
-                            }
-                        }
+                        sqlCommand.Dispose();
+                        sqlConnection.Close();
+                        return userID;
+                    }
+                    else
+                    {
+                        sqlCommand.Dispose();
+                        sqlConnection.Close();
+                        return 0;
                     }
 
-                    Admin admin = new Admin(userID, userData);
-                    user.Add(userID, admin);
-                    userData.Clear();
-                    sqlCommand.Dispose();
-                    sqlConnection.Close();
-                    return userID;
                 }
-                else
-                {
-                    sqlCommand.Dispose();
-                    sqlConnection.Close();
-                    return 0;
-                }
-
+            }
+            catch(Exception)
+            {
+                return 0;
             }
 
         }
         public static SqlConnection GetDBConnection()
         {
-            string dataSource = @"LAPTOP-8VF3GIKH\SQLEXPRESS";
-            string dataBase = "RealEstate";
-            string connectionString = @"Data Source=" + dataSource + ";Initial Catalog=" + dataBase + ";Integrated Security=true;";
-            SqlConnection sqlConnection = new SqlConnection(connectionString);
+            string connectionstring = ConfigurationManager.ConnectionStrings["RealEstate"].ConnectionString;
+            SqlConnection sqlConnection = new SqlConnection(connectionstring);
             return sqlConnection;
-
-            //string connectionstring = ConfigurationManager.ConnectionStrings["RealEstate"].ConnectionString;
-            //SqlConnection sqlConnection = new SqlConnection(connectionstring);
-            //return sqlConnection;
         }
         public static bool Login(string username, string password)
         {
-            // bool flag = false;
-            string selectQuery = "SPUserLogin";
-            using (SqlCommand sqlCommand = new SqlCommand(selectQuery, sqlConnection))
+            try
             {
-                sqlCommand.CommandType = CommandType.StoredProcedure;
-                SqlParameter param = new SqlParameter();
-                param.ParameterName = "@UserName";
-                param.Value = username;
-                param.SqlDbType = SqlDbType.VarChar;
-                sqlCommand.Parameters.Add(param);
+                string selectQuery = "SPUserLogin";
+                using (SqlCommand sqlCommand = new SqlCommand(selectQuery, sqlConnection))
+                {
+                    sqlCommand.CommandType = CommandType.StoredProcedure;
+                    SqlParameter param = new SqlParameter();
+                    param.ParameterName = "@UserName";
+                    param.Value = username;
+                    param.SqlDbType = SqlDbType.VarChar;
+                    sqlCommand.Parameters.Add(param);
 
-                param = new SqlParameter();
-                param.ParameterName = "@Password";
-                param.Value = password;
-                param.SqlDbType = SqlDbType.VarChar;
-                sqlCommand.Parameters.Add(param);
-                sqlConnection.Open();
-                string role = sqlCommand.ExecuteScalar().ToString();
-                sqlConnection.Close();
-                return true;
+                    param = new SqlParameter();
+                    param.ParameterName = "@Password";
+                    param.Value = password;
+                    param.SqlDbType = SqlDbType.VarChar;
+                    sqlCommand.Parameters.Add(param);
+                    sqlConnection.Open();
+                    string role = sqlCommand.ExecuteScalar().ToString();
+                    sqlConnection.Close();
+                    return true;
 
+                }
             }
-            /*private static void AddAdminDetails()
+            catch(Exception)
             {
-                Admin admin = new Admin("Karthika", "Karthika20", "admin", "994494218", "karthika@gmail.com");
-
-            }*/
+                return false;
+            }
+            
         }
         public static void RefreshData(GridView userGrid)
         {
             SqlCommand sqlCommand = new SqlCommand("SPSelect", sqlConnection);
-            sqlConnection.Open();
             SqlDataAdapter adapter = new SqlDataAdapter(sqlCommand);
             DataTable dataTable = new DataTable();
             adapter.Fill(dataTable);
             userGrid.DataSource = dataTable;
             userGrid.DataBind();
-            sqlConnection.Close();
         }
         public static void DeleteUserDetails(GridView gridView, GridViewDeleteEventArgs gridViewDeleteEventArgs)
         {
@@ -201,7 +177,7 @@ namespace OnlineRealEstateDAL
             sqlCommand.ExecuteNonQuery();
             sqlConnection.Close();
         }
-       public static void InsertUserDetails(GridView gridView)
+       public static void InsertUserDetails(GridView gridView) 
         {
             TextBox userName = gridView.FooterRow.FindControl("txtNameInsert") as TextBox;
             TextBox role = gridView.FooterRow.FindControl("txtRoleInsert") as TextBox;
@@ -240,9 +216,9 @@ namespace OnlineRealEstateDAL
                 sqlCommand.Parameters.Add(param);
 
                 param = new SqlParameter();
-                param.ParameterName = "@Phone_Number";
                 param.Value = phoneNumber.Text;
-                param.SqlDbType = SqlDbType.VarChar;
+                param.ParameterName = "@Phone_Number";
+                param.SqlDbType = SqlDbType.BigInt;
                 sqlCommand.Parameters.Add(param);
 
                 param = new SqlParameter();

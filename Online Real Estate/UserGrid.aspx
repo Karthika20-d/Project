@@ -7,7 +7,7 @@
         <table>
             <tr>
                 <td>
-                    <asp:GridView ID="UserData" runat="server" DataKeyNames="UserID" AutoGenerateColumns="False"  OnRowDeleting="UserGrid_RowDeleting" OnRowEditing="UserGrid_RowEditing" OnRowCancelingEdit="UserGrid_RowCancelingEdit" OnRowUpdating="UserGrid_RowUpdating" ShowFooter="true">
+                    <asp:GridView ID="UserData" runat="server" DataKeyNames="UserID" AutoGenerateColumns="False"  OnRowDeleting="UserGrid_RowDeleting" OnRowEditing="UserGrid_RowEditing" OnRowCancelingEdit="UserGrid_RowCancelingEdit" OnRowUpdating="UserGrid_RowUpdating" ShowFooter="true" >
                         <Columns>
                             <asp:TemplateField HeaderText="UserId">
                                 <EditItemTemplate>
@@ -22,11 +22,13 @@
                                         <asp:LinkButton ID="btnInsert" runat="server" Text="Insert" OnClick="btnInsert_Click">
                                         </asp:LinkButton>
                                         </footertemplate>
+                 
                             </asp:TemplateField>
+                          
                             <asp:TemplateField HeaderText="Name">
                                 <EditItemTemplate>
 
-                                    <asp:TextBox ID="txtName" runat="server" Text='<%# Bind("UserName") %>'>
+                                    <asp:TextBox ID="txtName" runat="server" Text='<%# Bind("UserName") %>' >
                                     </asp:TextBox>
                                 </EditItemTemplate>
                                 <ItemTemplate>
@@ -103,7 +105,7 @@
                                 </EditItemTemplate>
                                 <ItemTemplate>
                                     <asp:Label ID="lblRole" runat="server" Text='<%# Bind("Role") %>'>
-                                    </asp:Label>
+                                    </asp:Label> 
                                 </ItemTemplate>
                                 <FooterTemplate>
                                     <asp:TextBox ID="txtRoleInsert" runat="server">

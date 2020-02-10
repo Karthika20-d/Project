@@ -19,7 +19,7 @@
             <table>
                 <tr>
                     <td class="auto-style1">
-                        <h1>Real Estate</h1>
+                       <header><h1>Real Estate</h1></header> 
                         <a href="SignUp.aspx">SignUp </a><a href="Login.aspx">Login </a></td>
                 </tr>
                 <tr>
